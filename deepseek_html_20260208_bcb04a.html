@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七年级上册历史知识猜词游戏</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .main-content {
+            flex: 3;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .sidebar {
+            flex: 1;
+            min-width: 250px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-left: 20px;
+        }
+        
+        .word-display {
+            background-color: #2c3e50;
+            color: white;
+            font-size: 2.5rem;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            min-height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .timer {
+            font-size: 3rem;
+            text-align: center;
+            color: #e74c3c;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .start-btn {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .next-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .skip-btn {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .pass-btn {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        .end-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .group-selector {
+            margin-bottom: 25px;
+        }
+        
+        .group-selector h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        
+        .groups {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .group-btn {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            padding: 12px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .group-btn:hover {
+            background-color: #d5dbdb;
+        }
+        
+        .group-btn.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        
+        .score-board {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+        
+        .score-board h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .score-value {
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .game-instructions {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .game-instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .game-instructions ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .game-instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .word-list {
+            margin-top: 25px;
+            display: none;
+        }
+        
+        .word-list h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        
+        .words-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .word-item {
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .word-item.guessed {
+            background-color: #a3e4d7;
+            text-decoration: line-through;
+        }
+        
+        .category-label {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+            
+            .word-display {
+                font-size: 2rem;
+                min-height: 150px;
+            }
+            
+            .timer {
+                font-size: 2.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        
+        .highlight {
+            animation: highlight 1s ease;
+        }
+        
+        @keyframes highlight {
+            0% { background-color: #2c3e50; }
+            50% { background-color: #3498db; }
+            100% { background-color: #2c3e50; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>七年级上册历史知识猜词游戏</h1>
+            <p class="subtitle">你说我猜 - 涵盖历史人物、事件、制度、文化成就等108个词语</p>
+        </header>
+        
+        <div class="game-area">
+            <div class="main-content">
+                <div class="group-selector">
+                    <h3>选择词语分组 (共9组)</h3>
+                    <div class="groups" id="group-buttons">
+                        <!-- 分组按钮将通过JavaScript生成 -->
+                    </div>
+                </div>
+                
+                <div class="word-display" id="word-display">
+                    选择分组并开始游戏
+                </div>
+                
+                <div class="timer" id="timer">
+                    120
+                </div>
+                
+                <div class="controls">
+                    <button class="start-btn" id="start-btn">开始猜词</button>
+                    <button class="next-btn" id="next-btn">下一个词</button>
+                    <button class="skip-btn" id="skip-btn">跳过(10秒)</button>
+                    <button class="pass-btn" id="pass-btn">放弃过词</button>
+                    <button class="end-btn" id="end-btn">结束本轮</button>
+                </div>
+                
+                <div class="word-list" id="word-list-container">
+                    <h3>本组词语列表</h3>
+                    <div class="words-grid" id="words-grid">
+                        <!-- 词语列表将通过JavaScript生成 -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="score-board">
+                    <h3>得分统计</h3>
+                    <div class="score-item">
+                        <span>已猜对:</span>
+                        <span class="score-value" id="correct-count">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span>已跳过:</span>
+                        <span class="score-value" id="skipped-count">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span>剩余词语:</span>
+                        <span class="score-value" id="remaining-count">12</span>
+                    </div>
+                    <div class="score-item">
+                        <span>当前分组:</span>
+                        <span class="score-value" id="current-group">未选择</span>
+                    </div>
+                </div>
+                
+                <div class="game-instructions">
+                    <h3>游戏规则</h3>
+                    <ul>
+                        <li>选择一组词语，点击"开始猜词"按钮</li>
+                        <li>描述者看到词语后，用语言描述(不能说出词语中的字)</li>
+                        <li>猜词者根据描述猜测词语</li>
+                        <li>每组12个词，限时2分钟(120秒)</li>
+                        <li>"跳过"扣除10秒，"放弃"直接过词</li>
+                        <li>猜对后点击"下一个词"继续</li>
+                    </ul>
+                    <p><strong>提示:</strong> 描述者可以说同义词、相关事件、特征等帮助猜词者理解。</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>七年级上册历史知识猜词游戏 &copy; 2023 | 设计用于历史知识学习与巩固</p>
+        </footer>
+    </div>
+
+    <script>
+        // 七年级上册历史知识词语库
+        const historyWords = {
+            group1: {
+                name: "第一组：远古人类与文明起源",
+                words: [
+                    { word: "元谋人", category: "历史人物" },
+                    { word: "北京人", category: "历史人物" },
+                    { word: "山顶洞人", category: "历史人物" },
+                    { word: "半坡遗址", category: "历史事件" },
+                    { word: "河姆渡遗址", category: "历史事件" },
+                    { word: "炎黄部落", category: "历史事件" },
+                    { word: "尧舜禹", category: "历史人物" },
+                    { word: "禅让制", category: "政治制度" },
+                    { word: "大禹治水", category: "历史事件" },
+                    { word: "甲骨文", category: "科技文化成就" },
+                    { word: "青铜器", category: "科技文化成就" },
+                    { word: "夏朝", category: "政治制度" }
+                ]
+            },
+            group2: {
+                name: "第二组：夏商周时期",
+                words: [
+                    { word: "启", category: "历史人物" },
+                    { word: "世袭制", category: "政治制度" },
+                    { word: "商汤", category: "历史人物" },
+                    { word: "盘庚迁殷", category: "历史事件" },
+                    { word: "武王伐纣", category: "历史事件" },
+                    { word: "分封制", category: "政治制度" },
+                    { word: "宗法制", category: "政治制度" },
+                    { word: "礼乐制度", category: "政治制度" },
+                    { word: "周公", category: "历史人物" },
+                    { word: "司母戊鼎", category: "科技文化成就" },
+                    { word: "四羊方尊", category: "科技文化成就" },
+                    { word: "甲骨文", category: "科技文化成就" }
+                ]
+            },
+            group3: {
+                name: "第三组：春秋战国时期",
+                words: [
+                    { word: "春秋五霸", category: "历史事件" },
+                    { word: "齐桓公", category: "历史人物" },
+                    { word: "晋文公", category: "历史人物" },
+                    { word: "楚庄王", category: "历史人物" },
+                    { word: "吴越争霸", category: "历史事件" },
+                    { word: "战国七雄", category: "历史事件" },
+                    { word: "商鞅变法", category: "历史事件" },
+                    { word: "都江堰", category: "科技文化成就" },
+                    { word: "百家争鸣", category: "历史事件" },
+                    { word: "孔子", category: "历史人物" },
+                    { word: "老子", category: "历史人物" },
+                    { word: "孙子兵法", category: "科技文化成就" }
+                ]
+            },
+            group4: {
+                name: "第四组：秦汉时期(上)",
+                words: [
+                    { word: "秦始皇", category: "历史人物" },
+                    { word: "统一六国", category: "历史事件" },
+                    { word: "中央集权", category: "政治制度" },
+                    { word: "郡县制", category: "政治制度" },
+                    { word: "统一文字", category: "历史事件" },
+                    { word: "统一货币", category: "历史事件" },
+                    { word: "统一度量衡", category: "历史事件" },
+                    { word: "焚书坑儒", category: "历史事件" },
+                    { word: "万里长城", category: "科技文化成就" },
+                    { word: "秦兵马俑", category: "科技文化成就" },
+                    { word: "陈胜吴广起义", category: "历史事件" },
+                    { word: "楚汉之争", category: "历史事件" }
+                ]
+            },
+            group5: {
+                name: "第五组：秦汉时期(下)",
+                words: [
+                    { word: "汉高祖", category: "历史人物" },
+                    { word: "文景之治", category: "历史事件" },
+                    { word: "汉武帝", category: "历史人物" },
+                    { word: "推恩令", category: "政治制度" },
+                    { word: "罢黜百家，独尊儒术", category: "政治制度" },
+                    { word: "张骞通西域", category: "历史事件" },
+                    { word: "丝绸之路", category: "历史事件" },
+                    { word: "司马迁", category: "历史人物" },
+                    { word: "史记", category: "科技文化成就" },
+                    { word: "蔡伦", category: "历史人物" },
+                    { word: "造纸术", category: "科技文化成就" },
+                    { word: "张衡", category: "历史人物" }
+                ]
+            },
+            group6: {
+                name: "第六组：三国两晋南北朝",
+                words: [
+                    { word: "赤壁之战", category: "历史事件" },
+                    { word: "三国鼎立", category: "历史事件" },
+                    { word: "曹操", category: "历史人物" },
+                    { word: "诸葛亮", category: "历史人物" },
+                    { word: "八王之乱", category: "历史事件" },
+                    { word: "五胡内迁", category: "历史事件" },
+                    { word: "淝水之战", category: "历史事件" },
+                    { word: "北魏孝文帝改革", category: "历史事件" },
+                    { word: "民族融合", category: "历史事件" },
+                    { word: "王羲之", category: "历史人物" },
+                    { word: "兰亭序", category: "科技文化成就" },
+                    { word: "祖冲之", category: "历史人物" }
+                ]
+            },
+            group7: {
+                name: "第七组：隋唐时期(上)",
+                words: [
+                    { word: "隋文帝", category: "历史人物" },
+                    { word: "隋炀帝", category: "历史人物" },
+                    { word: "大运河", category: "科技文化成就" },
+                    { word: "科举制", category: "政治制度" },
+                    { word: "唐太宗", category: "历史人物" },
+                    { word: "贞观之治", category: "历史事件" },
+                    { word: "武则天", category: "历史人物" },
+                    { word: "开元盛世", category: "历史事件" },
+                    { word: "安史之乱", category: "历史事件" },
+                    { word: "三省六部制", category: "政治制度" },
+                    { word: "曲辕犁", category: "科技文化成就" },
+                    { word: "筒车", category: "科技文化成就" }
+                ]
+            },
+            group8: {
+                name: "第八组：隋唐时期(下)",
+                words: [
+                    { word: "文成公主入藏", category: "历史事件" },
+                    { word: "玄奘西行", category: "历史事件" },
+                    { word: "鉴真东渡", category: "历史事件" },
+                    { word: "遣唐使", category: "历史事件" },
+                    { word: "李白", category: "历史人物" },
+                    { word: "杜甫", category: "历史人物" },
+                    { word: "白居易", category: "历史人物" },
+                    { word: "颜真卿", category: "历史人物" },
+                    { word: "柳公权", category: "历史人物" },
+                    { word: "阎立本", category: "历史人物" },
+                    { word: "吴道子", category: "历史人物" },
+                    { word: "敦煌莫高窟", category: "科技文化成就" }
+                ]
+            },
+            group9: {
+                name: "第九组：宋元时期",
+                words: [
+                    { word: "宋太祖", category: "历史人物" },
+                    { word: "杯酒释兵权", category: "历史事件" },
+                    { word: "王安石变法", category: "历史事件" },
+                    { word: "澶渊之盟", category: "历史事件" },
+                    { word: "岳飞", category: "历史人物" },
+                    { word: "成吉思汗", category: "历史人物" },
+                    { word: "忽必烈", category: "历史人物" },
+                    { word: "行省制度", category: "政治制度" },
+                    { word: "活字印刷术", category: "科技文化成就" },
+                    { word: "指南针", category: "科技文化成就" },
+                    { word: "火药", category: "科技文化成就" },
+                    { word: "马可·波罗", category: "历史人物" }
+                ]
+            }
+        };
+
+        // 游戏状态变量
+        let currentGroup = null;
+        let currentWordIndex = 0;
+        let guessedWords = [];
+        let skippedWords = [];
+        let timerInterval = null;
+        let timeLeft = 120;
+        let gameActive = false;
+        let allWords = [];
+
+        // DOM元素
+        const wordDisplay = document.getElementById('word-display');
+        const timerDisplay = document.getElementById('timer');
+        const startBtn = document.getElementById('start-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const skipBtn = document.getElementById('skip-btn');
+        const passBtn = document.getElementById('pass-btn');
+        const endBtn = document.getElementById('end-btn');
+        const groupButtons = document.getElementById('group-buttons');
+        const correctCount = document.getElementById('correct-count');
+        const skippedCount = document.getElementById('skipped-count');
+        const remainingCount = document.getElementById('remaining-count');
+        const currentGroupDisplay = document.getElementById('current-group');
+        const wordsGrid = document.getElementById('words-grid');
+        const wordListContainer = document.getElementById('word-list-container');
+
+        // 初始化分组按钮
+        function initGroupButtons() {
+            groupButtons.innerHTML = '';
+            for (const groupKey in historyWords) {
+                const group = historyWords[groupKey];
+                const button = document.createElement('div');
+                button.className = 'group-btn';
+                button.textContent = group.name;
+                button.dataset.group = groupKey;
+                
+                button.addEventListener('click', function() {
+                    selectGroup(groupKey);
+                });
+                
+                groupButtons.appendChild(button);
+            }
+        }
+
+        // 选择分组
+        function selectGroup(groupKey) {
+            // 移除所有按钮的active类
+            document.querySelectorAll('.group-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 为当前选中的按钮添加active类
+            document.querySelector(`.group-btn[data-group="${groupKey}"]`).classList.add('active');
+            
+            currentGroup = groupKey;
+            currentWordIndex = 0;
+            guessedWords = [];
+            skippedWords = [];
+            allWords = [...historyWords[groupKey].words];
+            
+            // 更新显示
+            currentGroupDisplay.textContent = historyWords[groupKey].name;
+            updateScoreDisplay();
+            updateWordList();
+            
+            // 重置词语显示
+            wordDisplay.textContent = `已选择: ${historyWords[groupKey].name}`;
+            wordDisplay.classList.remove('highlight');
+            
+            // 显示词语列表
+            wordListContainer.style.display = 'block';
+            
+            // 重置按钮状态
+            startBtn.disabled = false;
+            nextBtn.disabled = true;
+            skipBtn.disabled = true;
+            passBtn.disabled = true;
+            endBtn.disabled = true;
+            
+            // 停止任何正在运行的计时器
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            // 重置计时器显示
+            timeLeft = 120;
+            timerDisplay.textContent = timeLeft;
+            gameActive = false;
+        }
+
+        // 开始游戏
+        function startGame() {
+            if (!currentGroup) {
+                alert('请先选择一个分组！');
+                return;
+            }
+            
+            if (allWords.length === 0) {
+                alert('本组词语已全部猜完！请选择其他分组。');
+                return;
+            }
+            
+            gameActive = true;
+            startBtn.disabled = true;
+            nextBtn.disabled = false;
+            skipBtn.disabled = false;
+            passBtn.disabled = false;
+            endBtn.disabled = false;
+            
+            // 显示第一个词语
+            showCurrentWord();
+            
+            // 开始计时
+            startTimer();
+        }
+
+        // 显示当前词语
+        function showCurrentWord() {
+            if (currentWordIndex < allWords.length) {
+                const currentWord = allWords[currentWordIndex];
+                wordDisplay.innerHTML = `
+                    <div>
+                        <div class="category-label">${currentWord.category}</div>
+                        <div>${currentWord.word}</div>
+                    </div>
+                `;
+                wordDisplay.classList.add('highlight');
+                
+                // 高亮当前词语在列表中
+                updateWordList();
+            } else {
+                wordDisplay.textContent = "本组词语已全部猜完！";
+                endGame();
+            }
+        }
+
+        // 下一个词语
+        function nextWord() {
+            if (!gameActive) return;
+            
+            // 将当前词语标记为已猜对
+            if (currentWordIndex < allWords.length) {
+                guessedWords.push(allWords[currentWordIndex]);
+                currentWordIndex++;
+            }
+            
+            updateScoreDisplay();
+            
+            if (currentWordIndex < allWords.length) {
+                showCurrentWord();
+            } else {
+                wordDisplay.textContent = "恭喜！本组词语已全部猜完！";
+                endGame();
+            }
+        }
+
+        // 跳过当前词语（扣除10秒）
+        function skipWord() {
+            if (!gameActive) return;
+            
+            // 将当前词语标记为已跳过
+            if (currentWordIndex < allWords.length) {
+                skippedWords.push(allWords[currentWordIndex]);
+                currentWordIndex++;
+                
+                // 扣除10秒
+                timeLeft = Math.max(0, timeLeft - 10);
+                timerDisplay.textContent = timeLeft;
+            }
+            
+            updateScoreDisplay();
+            
+            if (currentWordIndex < allWords.length) {
+                showCurrentWord();
+            } else {
+                wordDisplay.textContent = "本组词语已全部猜完！";
+                endGame();
+            }
+        }
+
+        // 放弃当前词语
+        function passWord() {
+            if (!gameActive) return;
+            
+            // 直接跳过当前词语，不扣除时间
+            if (currentWordIndex < allWords.length) {
+                currentWordIndex++;
+            }
+            
+            updateScoreDisplay();
+            
+            if (currentWordIndex < allWords.length) {
+                showCurrentWord();
+            } else {
+                wordDisplay.textContent = "本组词语已全部猜完！";
+                endGame();
+            }
+        }
+
+        // 结束游戏
+        function endGame() {
+            gameActive = false;
+            
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            startBtn.disabled = false;
+            nextBtn.disabled = true;
+            skipBtn.disabled = true;
+            passBtn.disabled = true;
+            endBtn.disabled = true;
+            
+            // 显示结果
+            const guessedCount = guessedWords.length;
+            const totalCount = allWords.length;
+            wordDisplay.innerHTML = `
+                <div>
+                    <div>游戏结束！</div>
+                    <div style="font-size: 1.5rem; margin-top: 10px;">
+                        猜对 ${guessedCount}/${totalCount} 个词语
+                    </div>
+                </div>
+            `;
+        }
+
+        // 开始计时器
+        function startTimer() {
+            timeLeft = 120;
+            timerDisplay.textContent = timeLeft;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                
+                // 时间到
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    endGame();
+                    wordDisplay.innerHTML = `
+                        <div>
+                            <div>时间到！</div>
+                            <div style="font-size: 1.5rem; margin-top: 10px;">
+                                猜对 ${guessedWords.length}/${allWords.length} 个词语
+                            </div>
+                        </div>
+                    `;
+                }
+            }, 1000);
+        }
+
+        // 更新分数显示
+        function updateScoreDisplay() {
+            correctCount.textContent = guessedWords.length;
+            skippedCount.textContent = skippedWords.length;
+            remainingCount.textContent = allWords.length - currentWordIndex;
+        }
+
+        // 更新词语列表显示
+        function updateWordList() {
+            wordsGrid.innerHTML = '';
+            
+            allWords.forEach((wordObj, index) => {
+                const wordItem = document.createElement('div');
+                wordItem.className = 'word-item';
+                
+                // 如果词语已被猜对
+                if (guessedWords.includes(wordObj)) {
+                    wordItem.classList.add('guessed');
+                }
+                
+                // 如果是当前词语
+                if (index === currentWordIndex && gameActive) {
+                    wordItem.style.border = '2px solid #e74c3c';
+                    wordItem.style.fontWeight = 'bold';
+                }
+                
+                wordItem.innerHTML = `
+                    <div class="category-label">${wordObj.category}</div>
+                    <div>${wordObj.word}</div>
+                `;
+                
+                wordsGrid.appendChild(wordItem);
+            });
+        }
+
+        // 初始化事件监听器
+        function initEventListeners() {
+            startBtn.addEventListener('click', startGame);
+            nextBtn.addEventListener('click', nextWord);
+            skipBtn.addEventListener('click', skipWord);
+            passBtn.addEventListener('click', passWord);
+            endBtn.addEventListener('click', endGame);
+            
+            // 初始禁用一些按钮
+            nextBtn.disabled = true;
+            skipBtn.disabled = true;
+            passBtn.disabled = true;
+            endBtn.disabled = true;
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initGroupButtons();
+            initEventListeners();
+            
+            // 默认选择第一组
+            selectGroup('group1');
+        });
+    </script>
+</body>
+</html>
